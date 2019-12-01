@@ -39,11 +39,11 @@ public class GetCustomersController extends HttpServlet {
 		 * This method redirects to the Customer Listing page
 		 */
 		
-//		String searchKeyword = request.getParameter("searchKeyword");
+		String searchKeyword = request.getParameter("searchKeyword");
 		
 		CustomerDao dao = new CustomerDao();
 		List<Customer> customers = new ArrayList<Customer>(); 
-		customers = dao.getCustomers();
+		customers = dao.getCustomers(searchKeyword);
 		
 		request.setAttribute("customers", customers);
 		RequestDispatcher rd = request.getRequestDispatcher("showCustomer.jsp");

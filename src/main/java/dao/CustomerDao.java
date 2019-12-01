@@ -18,7 +18,7 @@ public class CustomerDao {
 	 * @param String searchKeyword
 	 * @return ArrayList<Customer> object
 	 */
-	public List<Customer> getCustomers() {
+	public List<Customer> getCustomers(String searchKeyword) {
 		/*
 		 * This method fetches one or more customers and returns it as an ArrayList
 		 */
@@ -31,21 +31,32 @@ public class CustomerDao {
 		 */
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setCustomerID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customer.setTelephone("5166328959");
-			customer.setCreditCard("1234567812345678");
-			customer.setRating(1);
-			customers.add(customer);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Customer, Person where Customer.Id = Person.SSN and FirstName like"
+					+ "\'%" + searchKeyword + "%\'" + "or LastName like \'%'" + searchKeyword + "%\'");
+			while(rs.next()) {
+					Customer customer = new Customer();
+					customer.setCustomerID(rs.getString("SSN"));
+					customer.setAddress(rs.getString("Address"));
+					customer.setLastName(rs.getString("LastName"));
+					customer.setFirstName(rs.getString("FirstName"));
+					customer.setCity(rs.getString("City"));
+					customer.setState(rs.getString("State"));
+					customer.setEmail(rs.getString("Email"));
+					customer.setZipCode(rs.getInt("ZipCode"));
+					customer.setTelephone(rs.getString("Telephone"));
+					customer.setCreditCard(rs.getString("CreditCard"));
+					customer.setRating(rs.getInt("Rating"));
+					customers.add(customer);
+					}
+		}catch(Exception e){
+			System.out.println(e);
 		}
+		
+		
+		
 		/*Sample data ends*/
 		
 		return customers;
@@ -82,21 +93,46 @@ public class CustomerDao {
 
 		
 		List<Customer> customers = new ArrayList<Customer>();
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setCustomerID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+			Statement st = con.createStatement();
+			String query = "SELECT SSN, Address, FirstName, LastName, City, State, Zipcode, Email"
+					+ "FROM Person"
+					+ "INNER JOIN Customer ON (Person.SSN=Customer.Id)"
+					+ "INNER JOIN LivesAt ON (Person.SSN=LivesAt.SSN)"
+					+ "INNER JOIN Location ON (LivesAt.ZipCode=Location.ZipCode)";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerID(rs.getString("SSN"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setEmail(rs.getString("Email"));
+
+				customers.add(customer);
+			}
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 		/*Sample data ends*/
+
+//		for (int i = 0; i < 10; i++) {
+//			Customer customer = new Customer();
+//			customer.setCustomerID("111-11-1111");
+//			customer.setAddress("123 Success Street");
+//			customer.setLastName("Lu");
+//			customer.setFirstName("Shiyong");
+//			customer.setCity("Stony Brook");
+//			customer.setState("NY");
+//			customer.setEmail("shiyong@cs.sunysb.edu");
+//			customer.setZipCode(11790);
+//			customers.add(customer);			
+//		}
 		
 		return customers;
 	}

@@ -44,6 +44,7 @@ public class LoginController extends HttpServlet {
 		
 		if(login != null) {
 			String role = login.getRole();
+			System.out.println(role);
 			request.getSession(true).setAttribute("email", username);
 			request.getSession(true).setAttribute("role", role);
 			if(role.equals("manager")) {

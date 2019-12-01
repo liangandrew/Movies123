@@ -10,9 +10,8 @@
 
 
 <!--
-	This is the Show Auction History page
-	This page displays the history of a particular auction in terms of bidding history
-	The details are fetched using the "bids" field from the request object
+	This is the Show Order History page
+	
 -->
 
 <html>

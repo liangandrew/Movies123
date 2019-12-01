@@ -2,7 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.sql.*;
 import model.Customer;
 import model.Employee;
 
@@ -47,7 +47,7 @@ public class EmployeeDao {
 		 * employeeID, which is the Employee's ID which has to be deleted, is given as method parameter
 		 * The sample code returns "success" by default.
 		 * You need to handle the database deletion and return "success" or "failure" based on result of the database deletion.
-		 */
+		 */ 
 		
 		/*Sample data begins*/
 		return "success";
