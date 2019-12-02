@@ -12,6 +12,7 @@ public class Rental {
 	private int orderID;
 	private int movieID;
 	private int customerRepID;
+	
 	public int getAccountID() {
 		return accountID;
 	}

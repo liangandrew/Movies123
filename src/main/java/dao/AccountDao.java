@@ -6,6 +6,7 @@ import java.util.List;
 import model.Employee;
 import model.Movie;
 import model.Account;
+import java.sql.*;
 
 public class AccountDao {
 	
@@ -22,7 +23,45 @@ public class AccountDao {
 			int income = 0;
 					
 			/*Sample data begins*/
-			income = 100;
+			//Get the date from account, then go through all accounts where the creation date is before that 
+			String date = account.getAcctCreateDate();	//in format of month-year
+			String[] parts = date.split("-");
+			String month = parts[0];
+			String year = parts[1];
+			String day = "30";
+			date = year + "-" + month + "-" + day;
+			
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			Statement st = con.createStatement();
+				String query = "SELECT SUM(totalSales) FROM("
+						+ "(SELECT COUNT(*)*10 AS totalSales FROM Account WHERE DateOpened < ? AND AccountType='Limited')";
+				query += "UNION ALL"
+						+ "(SELECT COUNT(*)*15 AS t1 FROM Account WHERE DateOpened < ? AND AccountType='Unlimited-1')";
+				query += "UNION ALL"
+						+ "(SELECT COUNT(*)*20 AS t2 FROM Account WHERE DateOpened < ? AND AccountType='Unlimited-2')";
+				query += "UNION ALL"
+						+ "(SELECT COUNT(*)*25 AS t3 FROM Account WHERE DateOpened < ? AND AccountType='Unlimited-3')";
+				query += ")total";
+				PreparedStatement ps = con.prepareStatement(query);
+				ps.setString(1, date);
+				ps.setString(2, date);
+				ps.setString(3, date);
+				ps.setString(4, date);
+				ResultSet rs = ps.executeQuery();
+				System.out.println(rs);
+				while(rs.next()) {
+					int j =rs.getInt("SUM(totalSales)");
+					System.out.println(j);
+					income = j;
+					
+				}
+				
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			
+			
 			/*Sample data ends*/
 			
 	
@@ -34,6 +73,18 @@ public class AccountDao {
 
 		
 		/*Sample data begins*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String query = "UPDATE Account "
+					+ "SET AccountType = '"+accountType+"'"
+							+ " WHERE CustomerId= '"+customerID+"'";
+			st.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		return "success";
 		/*Sample data ends*/
 

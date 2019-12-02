@@ -33,7 +33,8 @@ public class CustomerDao {
 		/*Sample data begins*/
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			Statement st = con.createStatement();
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("select * from Customer, Person where Customer.Id = Person.SSN and FirstName like"
 					+ "\'%" + searchKeyword + "%\'" + "or LastName like \'%'" + searchKeyword + "%\'");
 			while(rs.next()) {
