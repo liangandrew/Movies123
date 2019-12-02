@@ -99,9 +99,9 @@ public class CustomerDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
 			Statement st = con.createStatement();
 			String query = "SELECT SSN, Address, FirstName, LastName, City, State, Zipcode, Email"
-					+ "FROM Person"
-					+ "INNER JOIN Customer ON (Person.SSN=Customer.Id)"
-					+ "INNER JOIN LivesAt ON (Person.SSN=LivesAt.SSN)"
+					+ "FROM Person "
+					+ "INNER JOIN Customer ON (Person.SSN=Customer.Id) "
+					+ "INNER JOIN LivesAt ON (Person.SSN=LivesAt.SSN) "
 					+ "INNER JOIN Location ON (LivesAt.ZipCode=Location.ZipCode)";
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next()) {

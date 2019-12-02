@@ -21,9 +21,11 @@ public class RentalDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
 			Statement st = con.createStatement();
-			String query = "SELECT AccoutId, OrderId, MovieId, CustRepId"
-					+ "FROM Customer, Account, Rental"
-					+ "WHERE Customer.Id=? AND Customer.Id=Account.CustomerId AND Account.Id=Rental.AccountId";	
+			customerID = customerID.replaceAll("-","");
+			String query = "SELECT AccountId, OrderId, MovieId, CustRepId "
+					+ "FROM (Customer INNER JOIN Account ON (Customer.Id=Account.CustomerId)) "
+					+ "INNER JOIN Rental ON (Account.Id=Rental.AccountId) "
+					+ "WHERE Customer.Id= ? ";	
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, customerID);
 			ResultSet rs = ps.executeQuery();

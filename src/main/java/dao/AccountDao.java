@@ -77,15 +77,17 @@ public class AccountDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
+			customerID = customerID.replaceAll("-","");
 			String query = "UPDATE Account "
 					+ "SET AccountType = '"+accountType+"'"
-							+ " WHERE CustomerId= '"+customerID+"'";
+					+ " WHERE CustomerId= '"+customerID+"'";
 			st.executeUpdate(query);
+			System.out.println(customerID);
+			return "success";
 		} catch (Exception e) {
 			System.out.println(e);
 			return "failure";
 		}
-		return "success";
 		/*Sample data ends*/
 
 	}
