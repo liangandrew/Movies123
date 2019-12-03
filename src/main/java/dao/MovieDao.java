@@ -240,11 +240,33 @@ public class MovieDao {
 
 		List<Movie> movies = new ArrayList<Movie>();
 		/*Sample data begins*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String query = "SELECT MovieName, Movie.Id FROM (Movie INNER JOIN MovieQ ON (Id=MovieId)) "
+					+ "INNER JOIN Account ON (AccountId = Id) "
+					+ "INNER JOIN Customer ON (Account.CustomerId=Id) "
+					+ "WHERE Customer.Id= ? ";
+			PreparedStatement ps =con.prepareStatement(query);
+			customerID = customerID.replace("-", "");
+			ps.setString(1, customerID);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setMovieID(rs.getInt("MovieId"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movies.add(movie);
+			}
+		} catch (Exception e) {
+			System.out.println();
+		}
+		
 		
 		for (int i = 0; i < 4; i++) {
 			Movie movie = new Movie();
 			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
+			movie.setMovieName("The matrix");
 			movies.add(movie);
 		}
 		/*Sample data ends*/
@@ -266,15 +288,32 @@ public List<Movie> getQueueOfMovies(String customerID){
 
 		List<Movie> movies = new ArrayList<Movie>();
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String query = "SELECT Movie.MovieName, Movie.Id, Movie.MovieType FROM (Movie INNER JOIN MovieQ ON (Id=MovieId)) "
+					+ "INNER JOIN Account ON (MovieQ.AccountId = Account.Id) "
+
+					+ "WHERE CustomerId=?";
+			PreparedStatement ps =con.prepareStatement(query);
+			customerID = customerID.replace("-", "");
+			ps.setString(1, customerID);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				
+				Movie movie = new Movie();
+				movie.setMovieID(rs.getInt("Movie.Id"));
+				movie.setMovieName(rs.getString("Movie.MovieName"));
+				movie.setMovieType(rs.getString("Movie.MovieType"));
+				movies.add(movie);
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
 		}
+
 		/*Sample data ends*/
-		
 		return movies;
 		
 		
