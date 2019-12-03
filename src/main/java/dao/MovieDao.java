@@ -6,6 +6,7 @@ import java.util.List;
 import model.Order;
 import model.Employee;
 import model.Movie;
+import java.sql.*;
 
 public class MovieDao {
 
@@ -21,15 +22,25 @@ public class MovieDao {
 		List<Movie> movies = new ArrayList<Movie>();
 				
 		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movie.setDistFee(10000);
-			movie.setNumCopies(3);
-			movie.setRating(5);
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Movie");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
 		}
 		/*Sample data ends*/
 		
@@ -48,12 +59,29 @@ public class MovieDao {
 		Movie movie = new Movie();
 		
 		/*Sample data begins*/
-		movie.setMovieID(1);
-		movie.setMovieName("The Godfather");
-		movie.setMovieType("Drama");
-		movie.setDistFee(10000);
-		movie.setNumCopies(3);
-		movie.setRating(5);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Movie where Id = '" + movieID + "'");
+			while(rs.next()) {
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				System.out.println(movie.getMovieID());
+				return movie;
+			
+			}
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
+
 		/*Sample data ends*/
 		
 		return movie;
@@ -70,8 +98,24 @@ public class MovieDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select count(*) from Movie");
+			int count = 0;
+			if(rs.next()) {
+				count = rs.getInt(1);
+				count++;
+			}
+			String sql = "INSERT INTO Movie " + "VALUES (" + count + ", '"+movie.getMovieName()+"', '"+movie.getMovieType()+"', "+movie.getRating()+", "+movie.getDistFee()+", "+movie.getNumCopies()+")";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 
 	}
 	
@@ -196,6 +240,7 @@ public class MovieDao {
 
 		List<Movie> movies = new ArrayList<Movie>();
 		/*Sample data begins*/
+		
 		for (int i = 0; i < 4; i++) {
 			Movie movie = new Movie();
 			movie.setMovieID(1);
@@ -236,56 +281,7 @@ public List<Movie> getQueueOfMovies(String customerID){
 		
 	}
 	
-	
 
-//	public List getMoviesBySeller(String sellerID) {
-//		
-//		/*
-//		 * The students code to fetch data from the database will be written here
-//		 * Query to fetch movies sold by a given seller, indicated by sellerID, must be implemented
-//		 * sellerID, which is the Sellers's ID who's movies are fetched, is given as method parameter
-//		 * The bid and order details of each of the movies should also be fetched
-//		 * The bid details must have the highest current bid for the movie
-//		 * The order details must have the details about the order in which the movie is sold
-//		 * Each movie record is required to be encapsulated as a "Movie" class object and added to the "movies" List
-//		 * Each bid record is required to be encapsulated as a "Bid" class object and added to the "bids" List
-//		 * Each order record is required to be encapsulated as a "Order" class object and added to the "orders" List
-//		 * The movies, bids and orders Lists have to be added to the "output" List and returned
-//		 */
-//
-//		List output = new ArrayList();
-//		List<Movie> movies = new ArrayList<Movie>();
-//		List<Bid> bids = new ArrayList<Bid>();
-//		List<Order> orders = new ArrayList<Order>();
-//		
-//		/*Sample data begins*/
-//		for (int i = 0; i < 4; i++) {
-//			Movie movie = new Movie();
-//			movie.setMovieID(123);
-//			movie.setDescription("sample description");
-//			movie.setType("BOOK");
-//			movie.setName("Sample Book");
-//			movies.add(movie);
-//			
-//			Bid bid = new Bid();
-//			bid.setCustomerID("123-12-1234");
-//			bid.setBidPrice(120);
-//			bids.add(bid);
-//			
-//			Order order = new Order();
-//			order.setMinimumBid(100);
-//			order.setBidIncrement(10);
-//			order.setOrderID(123);
-//			orders.add(order);
-//		}
-//		/*Sample data ends*/
-//		
-//		output.add(movies);
-//		output.add(bids);
-//		output.add(orders);
-//		
-//		return output;
-//	}
 
 	public List<Movie> getMovieTypes() {
 		
@@ -299,11 +295,22 @@ public List<Movie> getQueueOfMovies(String customerID){
 		List<Movie> movies = new ArrayList<Movie>();
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 6; i++) {
-			Movie movie = new Movie();
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select distinct MovieType from Movie");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setMovieType(rs.getString("MovieType"));
+				movies.add(movie);
+			}
+			
 		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 		return movies;
@@ -324,17 +331,30 @@ public List<Movie> getQueueOfMovies(String customerID){
 		List<Movie> movies = new ArrayList<Movie>();
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM (Movie INNER JOIN AppearedIn ON (Id=MovieId)) "
+					+ "INNER JOIN Actor ON (ActorId=Actor.Id) "
+					+ "WHERE MovieName like \'%" + movieName + "%\' OR ActorName like \'%" + movieName + "%\'");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
 			
 		}
-		/*Sample data ends*/
-		
+		catch(Exception e) {
+			System.out.println(e);
+		}
 
+		/*Sample data ends*/
 		
 		return movies;
 	}
@@ -357,7 +377,7 @@ public List<Movie> getQueueOfMovies(String customerID){
 		for (int i = 0; i < 4; i++) {
 			Movie movie = new Movie();
 			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
+			movie.setMovieName("The matrix");
 			movie.setMovieType("Drama");
 			movies.add(movie);
 			
@@ -385,14 +405,27 @@ public List<Movie> getQueueOfMovies(String customerID){
 		List<Movie> movies = new ArrayList<Movie>();
 				
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Movie where MovieType = '" +movieType+ "'");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
 			
 		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 
@@ -407,14 +440,27 @@ public List<Movie> getQueueOfMovies(String customerID){
 		List<Movie> movies = new ArrayList<Movie>();
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Movie where MovieName ='" +movieName+ "'");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
 			
 		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 
@@ -447,19 +493,30 @@ public List<Movie> getQueueOfMovies(String customerID){
 
 	public List getMovieRentalsByType(String movieType) {
 		
-	
-
 		List<Movie> movies = new ArrayList<Movie>();
 				
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Movie movie = new Movie();
-			movie.setMovieID(1);
-			movie.setMovieName("The Godfather");
-			movie.setMovieType("Drama");
-			movies.add(movie);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Movie where Movie.MovieType = '" +movieType+ "'");
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
 			
 		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 
