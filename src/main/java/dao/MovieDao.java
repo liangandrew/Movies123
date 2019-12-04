@@ -595,6 +595,30 @@ public List<Movie> getQueueOfMovies(String customerID){
 		List<Movie> movies = new ArrayList<Movie>();
 		
 		/*Sample data begins*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String query = "SELECT * FROM (Movie INNER JOIN Rental ON (Id=MovieId)) "
+					+ "INNER JOIN Account ON (Rental.AccountId=Account.Id) "
+					+ "INNER JOIN Customer ON (Account.CustomerId=Customer.Id) "
+					+ "WHERE Customer.FirstName like \'%" + customerName + "%\' OR Customer.LastName like \'%" + customerName +"%\'";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next()) {
+				Movie movie = new Movie();
+				movie.setDistFee(rs.getInt("DistrFee"));
+				movie.setRating(rs.getInt("Rating"));
+				movie.setMovieID(rs.getInt("Id"));
+				movie.setMovieName(rs.getString("MovieName"));
+				movie.setMovieType(rs.getString("MovieType"));
+				movie.setNumCopies(rs.getInt("NumCopies"));
+				movies.add(movie);
+			}
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
 //		for (int i = 0; i < 4; i++) {
 //			Movie movie = new Movie();
 //			movie.setMovieID(1);

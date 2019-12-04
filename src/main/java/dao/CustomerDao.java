@@ -184,17 +184,30 @@ public class CustomerDao {
 		
 		/*Sample data begins*/
 		Customer customer = new Customer();
-		customer.setCustomerID("111-11-1111");
-		customer.setAddress("123 Success Street");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setCity("Stony Brook");
-		customer.setState("NY");
-		customer.setEmail("shiyong@cs.sunysb.edu");
-		customer.setZipCode(11790);
-		customer.setTelephone("5166328959");
-		customer.setCreditCard("1234567812345678");
-		customer.setRating(1);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Customer where Id = '"+customerID+"'");		
+			while(rs.next()) {
+				customer.setCustomerID(rs.getString("Id"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("Email"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setTelephone(rs.getString("Telephone"));
+				customer.setCreditCard(rs.getString("CreditCard"));
+				customer.setRating(rs.getInt("Rating"));
+			}
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 		return customer;
@@ -209,7 +222,19 @@ public class CustomerDao {
 		 */
 
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String sql = "DELETE FROM Customer where Customer.Id = '" +customerID+"' ";
+			st.executeUpdate(sql);
+			return "success";
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 		
 	}
@@ -268,7 +293,21 @@ public class CustomerDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			
+			String sql = "INSERT INTO Customer " + "VALUES ('" + customer.getCustomerID() + "', '"+customer.getEmail()+"', '"+customer.getRating()+"', '"+
+					customer.getCreditCard()+"', '"+customer.getFirstName()+"', '"+customer.getLastName()+"', '"+customer.getCity()+"'"
+					+ ", '"+customer.getZipCode()+"', '"+customer.getTelephone()+"', '"+customer.getState()+"', '"+customer.getAddress()+"')";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
@@ -283,7 +322,23 @@ public class CustomerDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			//System.out.println(movie.getMovieName());
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agar"
+					+ "gueta", "111456257");
+			Statement st = con.createStatement();
+			//int Id = movie.getMovieID();
+			String sql = "UPDATE Customer " + "SET FirstName ='"+customer.getFirstName()+"', LastName='"+customer.getLastName()+"', Rating="+customer.getRating()+", Email='"+customer.getEmail()+"', CreditCard='"+customer.getCreditCard()+"'"
+					+ ", City='"+customer.getCity()+"', ZipCode='"+customer.getZipCode()+"', Telephone='"+customer.getTelephone()+"', State='"+customer.getState()+"', Address='"+customer.getAddress()+"' "
+					+ "WHERE Id ='"+customer.getCustomerID() +"' ";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
