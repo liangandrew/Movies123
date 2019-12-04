@@ -22,7 +22,20 @@ public class EmployeeDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			
+			String sql = "INSERT INTO Employee " + "VALUES ('" + employee.getEmployeeID() + "', '"+employee.getStartDate()+"', '"+employee.getHourlyRate()+"', '"+employee.getEmail()+"', '"+employee.getFirstName()+"', '"+employee.getLastName()+"', '"+employee.getAddress()+"'"
+					+ ", '"+employee.getCity()+"', '"+employee.getState()+"', '"+employee.getZipCode()+"', '"+employee.getTelephone()+"', '"+employee.getLevel()+"', '"+employee.getRevenue()+"')";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
@@ -37,7 +50,22 @@ public class EmployeeDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agar"
+					+ "gueta", "111456257");
+			Statement st = con.createStatement();
+			String sql = "UPDATE Employee " + "SET FirstName ='"+employee.getFirstName()+"', LastName='"+employee.getLastName()+"', HourlyRate='"+employee.getHourlyRate()+"', Email='"+employee.getEmail()+"', StartDate='"+employee.getStartDate()+"'"
+					+ ", City='"+employee.getCity()+"', ZipCode='"+employee.getZipCode()+"', Telephone='"+employee.getTelephone()+"', State='"+employee.getState()+"', Address='"+employee.getAddress()+"'"
+					+ ", Level='"+employee.getLevel()+"', Revenue='"+employee.getRevenue()+"' "
+					+ "WHERE Id ='"+employee.getEmployeeID() +"'";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
@@ -50,7 +78,20 @@ public class EmployeeDao {
 		 */ 
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String sql = "DELETE FROM Employee where Employee.Id = '" +employeeID+"' ";
+			st.executeUpdate(sql);
+			return "success";
+
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
