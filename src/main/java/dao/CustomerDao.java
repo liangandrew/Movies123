@@ -79,7 +79,21 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select min(Account.DateOpened), Customer.Id, Customer.LastName, Customer.FirstName, Customer.Email from Customer, Account where Customer.Id = Account.CustomerId");
+			String query = "SELECT MIN(Account.DateOpened) FROM (Customer INNER JOIN Account ON (Customer.Id=Account.CustomerId)) ";
+			
+			ResultSet r = st.executeQuery(query);
+			Date date = new Date(0,0,0);
+			if(r.next()) {
+				date = r.getDate(1);
+			}
+			System.out.println(date);
+			
+			// query customer and account where account creation date matches the date
+			String sql = "SELECT Customer.Id, LastName, FirstName, Email FROM (Customer INNER JOIN Account ON (Customer.Id=Account.CustomerId)) "
+					+ "WHERE Account.DateOpened = ? ";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setDate(1, date);
+			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				customer.setCustomerID(rs.getString("Id"));
 				customer.setLastName(rs.getString("LastName"));
@@ -248,7 +262,22 @@ public class CustomerDao {
 		 * The Customer's ID is required to be returned as a String
 		 */
 
-		return "111-11-1111";
+		String customerID = "";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Customer where Email = '"+ username +"'");
+			while(rs.next())
+				customerID= (rs.getString("Id"));
+				System.out.println(customerID);
+			return customerID;
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return customerID;
 	}
 
 

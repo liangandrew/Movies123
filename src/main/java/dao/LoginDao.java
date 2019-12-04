@@ -1,6 +1,10 @@
 package dao;
 
+import java.sql.*;
+
+import model.Employee;
 import model.Login;
+import model.Movie;
 
 public class LoginDao {
 	/*
@@ -16,12 +20,40 @@ public class LoginDao {
 		 * username, which is the email address of the user, is given as method parameter
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
-		 */
 		
 		/*Sample data begins*/
 		Login login = new Login();
-		//login.setRole("customerRepresentative");
-		login.setRole("manager");
+		//login.setRole("customerRepresentative");     
+		boolean isCustomer = false;
+		boolean isEmployee = false;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Customer where Email='"+username+"'");
+			while(rs.next()) {
+				isCustomer= true;
+			}
+			rs = st.executeQuery("select * from Employee where Email='"+username+"'");
+			while(rs.next()) {
+				isEmployee= true;
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		if(isCustomer) {
+			login.setRole("customer");
+		}
+		if(isEmployee) {
+			EmployeeDao employeeDao = new EmployeeDao();
+			String employeeID = employeeDao.getEmployeeID(username);
+			Employee employee = employeeDao.getEmployee(employeeID);
+			login.setRole(employee.getLevel());
+		}
+		if(isEmployee == false && isCustomer == false) {
+			login.setRole("customer");
+		}
 		return login;
 		/*Sample data ends*/
 		

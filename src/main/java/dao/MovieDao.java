@@ -268,7 +268,7 @@ public class MovieDao {
 				//Statement stmt = con.createStatement();
 				String sql = "SELECT Id, MovieName, MovieType "
 						+ "FROM Movie "
-						+ "WHERE Rating > 3 "
+						+ "WHERE Rating > 2 "
 						+ "AND MovieType = ? AND Id NOT IN (SELECT MovieId FROM (Customer "
 						+ "INNER JOIN Account ON (Customer.Id=Account.CustomerId)) "
 						+ "INNER JOIN Rental ON (Account.Id=Rental.AccountId) "
@@ -309,6 +309,7 @@ public class MovieDao {
 		List<Movie> movies = new ArrayList<Movie>();
 		/*Sample data begins*/
 		try {
+			System.out.println(customerID);
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
@@ -564,7 +565,7 @@ public List<Movie> getQueueOfMovies(String customerID){
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from Movie where MovieName ='" +movieName+ "'");
+			ResultSet rs = st.executeQuery("select * from Movie WHERE MovieName LIKE '%" +movieName+ "%'");
 			while(rs.next()) {
 				Movie movie = new Movie();
 				movie.setDistFee(rs.getInt("DistrFee"));
