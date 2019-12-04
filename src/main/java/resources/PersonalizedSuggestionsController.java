@@ -32,6 +32,8 @@ public class PersonalizedSuggestionsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String customerID = (String)request.getSession(false).getAttribute("customerID");
+		System.out.println(customerID);
+		System.out.println((String)request.getSession(false).getAttribute("email"));
 		
 		MovieDao movieDao = new MovieDao();
 		List<Movie> movies = movieDao.getMovieSuggestions(customerID);

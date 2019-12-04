@@ -71,13 +71,13 @@ public class OrderDao {
 		}
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Order order = new Order();
-			order.setOrderID(1);
-			order.setDateTime("11-11-09 10:00");
-			order.setReturnDate("11-14-09");
-			orders.add(order);
-		}
+//		for (int i = 0; i < 10; i++) {
+//			Order order = new Order();
+//			order.setOrderID(1);
+//			order.setDateTime("11-11-09 10:00");
+//			order.setReturnDate("11-14-09");
+//			orders.add(order);
+//		}
 		/*Sample data ends*/
 		
 		return orders;

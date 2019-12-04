@@ -34,7 +34,6 @@ public class RentalDao {
 				Rental rental = new Rental();
 				rental.setOrderID(rs.getInt("OrderId"));
 				int r = rental.getOrderID();
-				System.out.println(r);
 				rental.setMovieID(rs.getInt("MovieId"));
 				rental.setCustomerRepID(rs.getInt("CustRepId"));
 				

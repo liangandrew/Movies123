@@ -33,26 +33,27 @@ public class CustomerDao {
 		/*Sample data begins*/
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from Customer, Person where Customer.Id = Person.SSN and FirstName like"
-					+ "\'%" + searchKeyword + "%\'" + "or LastName like \'%'" + searchKeyword + "%\'");
+			ResultSet rs = st.executeQuery("select * from Customer");
 			while(rs.next()) {
-					Customer customer = new Customer();
-					customer.setCustomerID(rs.getString("SSN"));
-					customer.setAddress(rs.getString("Address"));
-					customer.setLastName(rs.getString("LastName"));
-					customer.setFirstName(rs.getString("FirstName"));
-					customer.setCity(rs.getString("City"));
-					customer.setState(rs.getString("State"));
-					customer.setEmail(rs.getString("Email"));
-					customer.setZipCode(rs.getInt("ZipCode"));
-					customer.setTelephone(rs.getString("Telephone"));
-					customer.setCreditCard(rs.getString("CreditCard"));
-					customer.setRating(rs.getInt("Rating"));
-					customers.add(customer);
-					}
-		}catch(Exception e){
+				Customer customer = new Customer();
+				customer.setCustomerID(rs.getString("Id"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("Email"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setTelephone(rs.getString("Telephone"));
+				customer.setCreditCard(rs.getString("CreditCard"));
+				customer.setRating(rs.getInt("Rating"));
+				customers.add(customer);
+			}
+			
+		}
+		catch(Exception e) {
 			System.out.println(e);
 		}
 		
@@ -96,30 +97,52 @@ public class CustomerDao {
 		List<Customer> customers = new ArrayList<Customer>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
 			Statement st = con.createStatement();
-			String query = "SELECT SSN, Address, FirstName, LastName, City, State, Zipcode, Email"
-					+ "FROM Person "
-					+ "INNER JOIN Customer ON (Person.SSN=Customer.Id) "
-					+ "INNER JOIN LivesAt ON (Person.SSN=LivesAt.SSN) "
-					+ "INNER JOIN Location ON (LivesAt.ZipCode=Location.ZipCode)";
-			ResultSet rs = st.executeQuery(query);
+			ResultSet rs = st.executeQuery("select * from Customer");
 			while(rs.next()) {
 				Customer customer = new Customer();
-				customer.setCustomerID(rs.getString("SSN"));
+				customer.setCustomerID(rs.getString("Id"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setState(rs.getString("State"));
+				customer.setCity(rs.getString("City"));
 				customer.setFirstName(rs.getString("FirstName"));
 				customer.setLastName(rs.getString("LastName"));
-				customer.setAddress(rs.getString("Address"));
-				customer.setCity(rs.getString("City"));
-				customer.setState(rs.getString("State"));
 				customer.setZipCode(rs.getInt("ZipCode"));
 				customer.setEmail(rs.getString("Email"));
-
 				customers.add(customer);
 			}
-		} catch (Exception e) {
+			
+		}
+		catch(Exception e) {
 			System.out.println(e);
 		}
+//		try {
+//			Class.forName("com.mysql.jdbc.Driver");
+//			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+//			Statement st = con.createStatement();
+//			String query = "SELECT SSN, Address, FirstName, LastName, City, State, Zipcode, Email"
+//					+ "FROM Person "
+//					+ "INNER JOIN Customer ON (Person.SSN=Customer.Id) "
+//					+ "INNER JOIN LivesAt ON (Person.SSN=LivesAt.SSN) "
+//					+ "INNER JOIN Location ON (LivesAt.ZipCode=Location.ZipCode)";
+//			ResultSet rs = st.executeQuery(query);
+//			while(rs.next()) {
+//				Customer customer = new Customer();
+//				customer.setCustomerID(rs.getString("SSN"));
+//				customer.setFirstName(rs.getString("FirstName"));
+//				customer.setLastName(rs.getString("LastName"));
+//				customer.setAddress(rs.getString("Address"));
+//				customer.setCity(rs.getString("City"));
+//				customer.setState(rs.getString("State"));
+//				customer.setZipCode(rs.getInt("ZipCode"));
+//				customer.setEmail(rs.getString("Email"));
+//
+//				customers.add(customer);
+//			}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 		/*Sample data ends*/
 
 //		for (int i = 0; i < 10; i++) {
