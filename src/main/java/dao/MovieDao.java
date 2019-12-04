@@ -148,7 +148,20 @@ public class MovieDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String sql = "DELETE FROM Movie where Movie.Id = '" +movieID+"' ";
+			st.executeUpdate(sql);
+			return "success";
+
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/*Sample data ends*/
 
 	}
