@@ -62,22 +62,22 @@ public class OrderDao {
 		 * customerID is the customer's primary key, given as method parameter
 		 */
 		
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
-			Statement st = con.createStatement();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		try {
+//			Class.forName("com.mysql.jdbc.Driver");
+//			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");			
+//			Statement st = con.createStatement();
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 		
 		/*Sample data begins*/
-//		for (int i = 0; i < 10; i++) {
-//			Order order = new Order();
-//			order.setOrderID(1);
-//			order.setDateTime("11-11-09 10:00");
-//			order.setReturnDate("11-14-09");
-//			orders.add(order);
-//		}
+		for (int i = 0; i < 10; i++) {
+			Order order = new Order();
+			order.setOrderID(1);
+			order.setDateTime("11-11-09 10:00");
+			order.setReturnDate("11-14-09");
+			orders.add(order);
+		}
 		/*Sample data ends*/
 		
 		return orders;
@@ -95,13 +95,24 @@ public class OrderDao {
 		 */
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Order order = new Order();
-			order.setOrderID(1);
-			order.setDateTime("11-11-09 10:00");
-			order.setReturnDate("11-14-09");
-			orders.add(order);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from Orders, Rental, Employee where Employee.Email = '" + employeeEmail + "' and Employee.Id = Rental.CustRepId and Rental.OrderId = Orders.Id and Orders.ReturnDate is NULL");
+			while(rs.next()) {
+				Order order= new Order();
+				order.setOrderID(rs.getInt("Id"));
+				order.setDateTime(rs.getString("TimeDate"));
+				order.setReturnDate(rs.getString("ReturnDate"));
+				orders.add(order);
+			}
+			
 		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 		
 		return orders;
@@ -118,7 +129,18 @@ public class OrderDao {
 		 * The method should return a "success" string if the update is successful, else return "failure"
 		 */
 		/* Sample data begins */
-		return "success";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			String sql = "UPDATE Orders set ReturnDate = NOW() where Orders.id = '" + orderID + "'";
+			st.executeUpdate(sql);
+			return "success";
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		/* Sample data ends */
 	}
 	

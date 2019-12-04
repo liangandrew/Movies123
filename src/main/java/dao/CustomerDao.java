@@ -75,10 +75,22 @@ public class CustomerDao {
 
 		/*Sample data begins*/
 		Customer customer = new Customer();
-		customer.setCustomerID("111-11-1111");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setEmail("shiyong@cs.sunysb.edu");
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://mysql3.cs.stonybrook.edu:3306/agargueta?user=agargueta", "agargueta", "111456257");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select min(Account.DateOpened), Customer.Id, Customer.LastName, Customer.FirstName, Customer.Email from Customer, Account where Customer.Id = Account.CustomerId");
+			while(rs.next()) {
+				customer.setCustomerID(rs.getString("Id"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setEmail(rs.getString("Email"));
+			}	
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		/*Sample data ends*/
 	
 		return customer;
